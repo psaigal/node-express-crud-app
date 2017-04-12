@@ -1,12 +1,6 @@
-// const express = require('express')
-// const app = express()
-// app.use(express.static('public'))
-// const bodyParser= require('body-parser')
-// app.use(bodyParser.json())
-// app.set('view engine', 'ejs')
-// const MongoClient = require('mongodb').MongoClient
-
+/* globals fetch */
 var update = document.getElementById('update')
+var del = document.getElementById('delete')
 
 update.addEventListener('click', function () {
   fetch('quotes', {
@@ -21,24 +15,21 @@ update.addEventListener('click', function () {
     if (response.ok) return response.json()
   })
   .then(data => {
+    window.location.reload()
     console.log(data)
   })
 })
 
-
-fetch('quotes', {
-  method: 'put',
-  headers: {'Content-Type': 'application/json'},
-  body: JSON.stringify({
-    'name': 'Darth Vader',
-    'quote': 'I find your lack of faith disturbing.'
+del.addEventListener('click', function () {
+  fetch('quotes', {
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      'name': 'Darth Vader'
+    })
+  }).then(function (response) {
+    window.location.reload()
   })
-}).then(res => {
-  if (res.ok) return res.json()
 })
-.then(data => {
-  console.log(data)
-})
-
-
-

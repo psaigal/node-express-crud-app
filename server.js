@@ -4,7 +4,6 @@ const app = express()
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
 app.use(bodyParser.json())
-
 app.use(bodyParser.urlencoded({extended: true}))
 
 const MongoClient = require('mongodb').MongoClient
@@ -43,6 +42,15 @@ app.put('/quotes', (req, res) => {
     res.send(result)
   })
 })
+
+app.delete('/quotes', (req, res) => {
+  db.collection('quotes').findOneAndDelete({name: req.body.name},
+  (err, result) => {
+    if (err) return res.send(500, err)
+    res.send('A darth vadar quote got deleted')
+  })
+})
+
 
 MongoClient.connect('mongodb://psaigal:password123!@ds159220.mlab.com:59220/quote-project', (err, database) => {
 	if (err) return console.log(err)
