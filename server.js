@@ -1,7 +1,9 @@
 const express = require('express')
 const bodyParser= require('body-parser')
 const app = express()
+app.use(express.static('public'))
 app.set('view engine', 'ejs')
+app.use(bodyParser.json())
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -26,6 +28,22 @@ app.post('/quotes', (req, res) => {
 	})
 })
 
+app.put('/quotes', (req, res) => {
+  db.collection('quotes')
+  .findOneAndUpdate({name: 'Priyanka Saigal'}, {
+    $set: {
+      name: req.body.name,
+      quote: req.body.quote
+    }
+  }, {
+    sort: {_id: -1},
+    upsert: true
+  }, (err, result) => {
+    if (err) return res.send(err)
+    res.send(result)
+  })
+})
+
 MongoClient.connect('mongodb://psaigal:password123!@ds159220.mlab.com:59220/quote-project', (err, database) => {
 	if (err) return console.log(err)
 	db = database
@@ -33,4 +51,6 @@ MongoClient.connect('mongodb://psaigal:password123!@ds159220.mlab.com:59220/quot
 	console.log('listening on 3000')
 	})
 })
+
+
 
